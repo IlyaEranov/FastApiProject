@@ -1,12 +1,12 @@
-from sqlmodel import JSON, SQLModel, Field, Column
+from beanie import Document
 from typing import Optional, List
+from pydantic import BaseModel
 
-class Event(SQLModel, table=True):
-    id: int = Field(default=None, primary_key=True)
+class Event(Document):
     title: str
     image: str 
     description: str
-    tags: List[str] = Field(sa_column=Column(JSON))
+    tags: List[str]
     location: str
     model_config = {
         "json_schema_extra": {
@@ -19,8 +19,10 @@ class Event(SQLModel, table=True):
             }
         }
     }
+    class Settings:
+        name = "events"
 
-class EventUpdate(SQLModel): 
+class EventUpdate(BaseModel): 
     title: Optional[str] 
     image: Optional[str]
     description: Optional[str]
